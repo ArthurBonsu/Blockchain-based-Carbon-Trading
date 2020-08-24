@@ -1,0 +1,168 @@
+pragma solidity >=0.4.0 <0.6.0;
+ 
+
+
+ contract   BuyerForCarbon  {
+          uint  i=0; 
+      
+
+      // PEOPLES 
+       struct Buyer {
+       address payable buyeraddress;
+       bytes32  buyername;
+        bytes32    buyingcompanydescription;
+        bytes32 buyingcompanytype;
+        bool status;
+        uint buyingcompanycount;
+       uint emissionproduced;
+       uint amountpaidsofar;
+       uint theentitiescount;
+       
+      mapping (address => Buyer[1000]) listofbuyers;
+      mapping (bytes32 => Buyer[1000]) setofbuyers;
+
+       }
+       
+        Buyer[] public thebuyingcompanystore; 
+        Buyer buyingcompanyobject;
+       
+        
+           //BIDS
+        struct Seller {
+       bytes32 sellername ;
+       address payable selleraddress;
+       bytes32 sellercompanytype;
+       bytes32 description;
+        uint sellingcapacity;
+        uint sellingcapacityleft;
+        bool status;
+        uint sellingrate;
+        uint capacitysupplied;
+        uint amounttobepaid;
+        uint amountpaid;
+        uint sellingmomentcount;
+        
+    
+      mapping (address => Seller[1000]) listofsellers;
+      mapping (bytes32 => Seller[1000]) setofsellers;
+
+       }
+       
+        Seller[] public sellerstore; 
+        Seller sellersobject;
+
+               struct EA {
+       address  payable EAaddress;
+       bytes32  EAname;
+       bytes32  EAdescription;
+      
+       bool status;
+       bytes32 carbonemmisionthreshold;
+       bytes32 emissionrate;
+       bytes32 role;
+       bytes32 threshholdetdate;
+       uint EAmomentcount;
+        
+    
+    
+      mapping (bytes32 => EA[1000]) setofEAs;
+       mapping (address => EA[1000]) listofEAs;
+       }
+       
+        EA[] public EAstore; 
+        EA EAObject;
+        
+        
+               struct IoT {
+       address  IoTDeviceAddress;
+       bytes32  IoTDeviceName;
+       bytes32  IoTDeviceDescription;
+       uint       emissionproduced;
+       bytes32       date;
+
+      
+        
+    
+      mapping (address => IoT[1000]) setofIoTs;
+      mapping (bytes32 => IoT[1000]) listofIoTs;
+
+       }
+       
+        IoT[] public IoTStore; 
+        IoT IoTObjects;
+        
+        
+
+
+
+
+     function Register(address  _registrar,  address _companyaddress, bytes32 _companyname,bytes32 _companytype, bool _companystatus, bytes32 _description) public  returns(address  _registrarhere,  address _companyaddresshere, bytes32 _companynamehere,bytes32 _companytypehere, bool _companystatushere, bytes32 _descriptionhere)   {
+
+ _registrarhere =_registrar; 
+_companyaddresshere =_companyaddress; 
+_companynamehere = _companyname;
+ _companytypehere = _companytype;
+ _companystatushere =_companystatus;
+ _descriptionhere = _description;
+
+
+       return (   _registrarhere,   _companyaddresshere,  _companynamehere, _companytypehere,  _companystatushere,  _descriptionhere);
+         
+         
+     }
+
+
+   
+
+event Receivecarbonemmittedevent (address _buyeraddress, address _iotdeviceaddress ,  uint _carbonemmissions, bytes32 _date);
+   function Receivecarbonemmitted(address _buyeraddress, address _iotdeviceaddress ,  uint _carbonemmissions, bytes32 _date ) public returns(address buyeraddresshere, address iotdeviceaddresshere ,  uint carbonemmissionshere, bytes32 datehere)   {
+        
+        
+        buyeraddresshere  = _buyeraddress; 
+        iotdeviceaddresshere= _iotdeviceaddress ; 
+        carbonemmissionshere =_carbonemmissions ;
+         datehere =_date ;
+        
+        
+        emit Receivecarbonemmittedevent( buyeraddresshere,  iotdeviceaddresshere ,  carbonemmissionshere,datehere);
+         return (buyeraddresshere, iotdeviceaddresshere ,   carbonemmissionshere, datehere);
+         
+          
+     }
+     
+     
+     event  Calculateannualemmissionsevent(address _buyeraddress, uint _carbonemmissions, uint _carbonthreshold,  uint _carbonemmissionrate, uint _carbonexceeded, uint  _carbonpercentage);
+  function Calculateannualemmissions(address _buyeraddress, uint _carbonemmissions, uint _carbonthreshold,  uint _carbonemmissionrate) public returns(address _buyeraddresshere, uint _carbonemmissionshere, uint carbonthresholdhere,  uint carbonemmissionratehere, uint carbonexceededhere, uint pricehere)   {
+         
+         uint carbonexceeded = 0; uint carbonpercentage =0; uint carbonprice =0;
+          carbonexceeded = _carbonthreshold - _carbonemmissions; 
+          carbonpercentage = (carbonexceeded / _carbonthreshold) *100;
+          carbonprice = carbonexceeded * _carbonemmissionrate;
+        
+        
+        emit Calculateannualemmissionsevent( _buyeraddress,  _carbonemmissions, _carbonthreshold,  _carbonemmissionrate, carbonexceeded,carbonpercentage);
+
+
+         return (_buyeraddress,  _carbonemmissions, _carbonthreshold,  _carbonemmissionrate, carbonexceeded,carbonprice );
+         
+          
+     }
+
+
+event PayAnnualEmmissionEvent (address _registrar, address _companyaddress, uint _amountpaid,  uint _amounttobepaid);
+   function PayAnnualEmmissions(address _registrar, address _companyaddress, uint _amountpaid,  uint _amounttobepaid ) public returns(address _registrarhere, address _companyaddresshere, uint amountpaidhere,  uint amounttobepaidhere)   {
+    
+    
+     _registrarhere =_registrar;
+     _companyaddresshere =_companyaddress;
+     amountpaidhere =_amountpaid;
+     amounttobepaidhere =_amounttobepaid;
+
+        emit PayAnnualEmmissionEvent( _registrarhere,  _companyaddresshere,  amountpaidhere,  amounttobepaidhere);
+         return ( _registrarhere,  _companyaddresshere, amountpaidhere,   amounttobepaidhere);
+         
+          
+     }
+
+
+}
