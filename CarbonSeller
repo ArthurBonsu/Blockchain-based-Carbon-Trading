@@ -1,0 +1,165 @@
+pragma solidity >=0.4.0 <0.6.0;
+ 
+
+
+ contract   CarbonSeller  {
+          uint  i=0; 
+      
+
+      // PEOPLES 
+       struct Buyer {
+       address payable buyeraddress;
+       bytes32  buyername;
+        bytes32    buyingcompanydescription;
+        bytes32 buyingcompanytype;
+        bool status;
+        uint buyingcompanycount;
+       uint emissionproduced;
+       uint amountpaidsofar;
+       uint theentitiescount;
+       
+      mapping (address => Buyer[1000]) listofbuyers;
+      mapping (bytes32 => Buyer[1000]) setofbuyers;
+
+       }
+       
+        Buyer[] public thebuyingcompanystore; 
+        Buyer buyingcompanyobject;
+       
+        
+           //BIDS
+        struct Seller {
+       bytes32 sellername ;
+       address payable selleraddress;
+       bytes32 sellercompanytype;
+       bytes32 description;
+        uint sellingcapacity;
+        uint sellingcapacityleft;
+        bool status;
+        uint sellingrate;
+        uint capacitysupplied;
+        uint amounttobepaid;
+        uint amountpaid;
+        uint sellingmomentcount;
+        
+    
+      mapping (address => Seller[1000]) listofsellers;
+      mapping (bytes32 => Seller[1000]) setofsellers;
+
+       }
+       
+        Seller[] public sellerstore; 
+        Seller sellersobject;
+
+               struct EA {
+       address  payable EAaddress;
+       bytes32  EAname;
+       bytes32  EAdescription;
+      
+       bool status;
+       bytes32 carbonemmisionthreshold;
+       bytes32 emissionrate;
+       bytes32 role;
+       bytes32 threshholdetdate;
+       uint EAmomentcount;
+        
+    
+    
+      mapping (bytes32 => EA[1000]) setofEAs;
+       mapping (address => EA[1000]) listofEAs;
+       }
+       
+        EA[] public EAstore; 
+        EA EAObject;
+        
+        
+               struct IoT {
+       address  IoTDeviceAddress;
+       bytes32  IoTDeviceName;
+       bytes32  IoTDeviceDescription;
+       uint       emissionproduced;
+       bytes32       date;
+
+      
+        
+    
+      mapping (address => IoT[1000]) setofIoTs;
+      mapping (bytes32 => IoT[1000]) listofIoTs;
+
+       }
+       
+        IoT[] public IoTStore; 
+        IoT IoTObjects;
+        
+        
+
+
+
+
+     function Register(address  _registrar,  address _companyaddress, bytes32 _companyname,bytes32 _companytype, bool _companystatus, bytes32 _description) public  returns(address  _registrarhere,  address _companyaddresshere, bytes32 _companynamehere,bytes32 _companytypehere, bool _companystatushere, bytes32 _descriptionhere)   {
+
+ _registrarhere =_registrar; 
+_companyaddresshere =_companyaddress; 
+_companynamehere = _companyname;
+ _companytypehere = _companytype;
+ _companystatushere =_companystatus;
+ _descriptionhere = _description;
+
+
+       return (   _registrarhere,   _companyaddresshere,  _companynamehere, _companytypehere,  _companystatushere,  _descriptionhere);
+         
+         
+     }
+
+
+   
+
+event SellCarbonEmmissionsEvent (address _selleraddress, address _buyeraddress ,  uint carbonsellilngrate, uint sellingcapacity, bytes32 _date);
+   function SellCarbonEmmissions(address _selleraddress, address _buyeraddress ,  uint carbonsellilngrate, uint sellingcapacity, bytes32 _date ) public returns(address _selleraddresshere, address _buyeraddresshere ,  uint carbonsellilngratehere, uint sellingcapacityhere, bytes32 _datehere)   {
+        
+        
+         _selleraddresshere = _selleraddress; 
+         _buyeraddresshere = _buyeraddress;  
+        carbonsellilngratehere = carbonsellilngrate; 
+        sellingcapacityhere =sellingcapacity; 
+         _datehere = _date;
+        
+        
+        
+        emit SellCarbonEmmissionsEvent( _selleraddress,  _buyeraddress ,   carbonsellilngrate,  sellingcapacity , _date);
+         return ( _selleraddresshere, _buyeraddresshere ,   carbonsellilngratehere,  sellingcapacityhere,  _datehere);
+         
+          
+     }
+     
+     
+     event SellerReceivepaymentevent(address _buyeraddress, uint _sellingcarboncapacity, uint _carbonsold,  uint _amounttobepaid, uint _amountpaid, uint amountleft, uint carbonleft);
+  function SellerReceivepayment(address _buyeraddress, uint _sellingcarboncapacity, uint _carbonsold,  uint _amounttobepaid, uint _amountpaid) public returns(address buyeraddress, uint sellingcarboncapacity, uint carbonsold,  uint amounttobepaid, uint amountpaid, uint amountlefthere, uint carbonlefthere)   {
+          uint amountleft =0;
+          uint carbonleft = 0;
+          
+          
+           buyeraddress = _buyeraddress;
+          sellingcarboncapacity =   _sellingcarboncapacity;
+           carbonsold=  _carbonsold;
+           amounttobepaid = _amounttobepaid; 
+           amountpaid =_amountpaid;
+          
+          carbonleft = _sellingcarboncapacity- _carbonsold;
+          amountleft = _amounttobepaid - _amountpaid;
+    
+        
+        
+        emit SellerReceivepaymentevent( _buyeraddress,  _sellingcarboncapacity,  _carbonsold,   _amounttobepaid,  _amountpaid, amountleft,carbonleft);
+
+
+         return ( _buyeraddress,  _sellingcarboncapacity,  _carbonsold,   _amounttobepaid,  _amountpaid, amountleft,carbonleft);
+         
+          
+     }
+
+
+
+
+
+}
